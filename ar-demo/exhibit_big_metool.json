@@ -1,0 +1,12 @@
+{
+  "fileName": "exhibit_big.usdz",
+  "vertices": 1961625,
+  "triangles": 653875,
+  "materials": 1,
+  "dimensions": "0.83 × 2.00 × 0.73",
+  "boundingBox": {
+    "x": 0.835,
+    "y": 2,
+    "z": 0.726
+  }
+}
