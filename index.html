@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>善化寺 · 数字博物馆</title>
+
+  <!-- Pannellum -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animation.css">
+</head>
+<body>
+
+  <!-- ======================== LANDING PAGE ======================== -->
+  <div id="landing-page" class="landing-page">
+    <div class="landing-bg"></div>
+    <div class="landing-content">
+      <div class="landing-logo">
+        <div class="logo-ring"></div>
+        <div class="logo-text">善化寺</div>
+      </div>
+      <div class="landing-subtitle">SHANHUA TEMPLE · DIGITAL MUSEUM</div>
+      <div class="landing-divider">
+        <span class="divider-line"></span>
+        <span class="divider-text">辽金遗构 · 千年梵音</span>
+        <span class="divider-line"></span>
+      </div>
+      <button id="btn-enter" class="btn-enter" onclick="app.enterMuseum()">
+        <span class="btn-text">开 始 探 索</span>
+        <span class="btn-arrow">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </button>
+      <div class="landing-footer">
+        <span>大同 · 始建于唐开元年间 · 公元713年</span>
+      </div>
+    </div>
+    <div class="landing-particles" id="particles"></div>
+  </div>
+
+  <!-- ======================== MUSEUM PAGE (Full-screen panorama) ======================== -->
+  <div id="museum-page" class="museum-page hidden">
+
+    <!-- Panorama fills everything -->
+    <div class="panorama-full">
+      <div id="panorama" class="panorama"></div>
+      <div class="era-overlay" id="era-overlay"></div>
+    </div>
+
+    <!-- ---- FLOATING TOP BAR (glassmorphism pill) ---- -->
+    <div class="glass-top">
+      <div class="glass-top-logo">
+        <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="12" stroke="var(--gold)" stroke-width="1.5" opacity="0.6"/>
+          <circle cx="14" cy="14" r="6" fill="var(--gold)" opacity="0.3"/>
+          <circle cx="14" cy="14" r="2.5" fill="var(--gold)"/>
+        </svg>
+        <span class="glass-top-title">善化寺数字博物馆</span>
+      </div>
+      <div class="glass-top-divider"></div>
+      <div class="glass-top-score">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        <span><strong id="culture-value">0</strong></span>
+      </div>
+      <div class="glass-top-progress">
+        <div class="progress-bar-mini">
+          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+        <span class="progress-text" id="progress-text">0/4</span>
+      </div>
+      <div class="glass-top-divider"></div>
+      <button class="glass-icon-btn" id="btn-sound" title="音效">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+        </svg>
+      </button>
+      <button class="glass-icon-btn" id="btn-fullscreen" title="全屏">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- ---- FAB BUTTONS (left: tasks, right: AI guide) ---- -->
+    <button class="fab-btn fab-left" id="fab-left" title="今日探索">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+        <rect x="9" y="3" width="6" height="4" rx="1"/>
+        <path d="M9 14l2 2 4-4"/>
+      </svg>
+    </button>
+    <button class="fab-btn fab-right" id="fab-right" title="AI 导览">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span class="fab-badge" id="fab-guide-badge"></span>
+    </button>
+
+    <!-- ---- LEFT PANEL ---- -->
+    <aside class="panel-left collapsed" id="panel-left">
+      <button class="panel-close" id="btn-close-left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      <div class="panel-header">
+        <h3>今日探索</h3>
+        <span class="panel-badge" id="task-badge">4 项待发现</span>
+      </div>
+      <ul class="task-list" id="task-list">
+        <li class="task-item" data-task="buddha">
+          <div class="task-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="8" r="4"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+            </svg>
+          </div>
+          <div class="task-info">
+            <span class="task-name">五方佛</span>
+            <span class="task-desc">辽代彩塑 · 大雄宝殿</span>
+          </div>
+          <div class="task-check">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+          </div>
+        </li>
+        <li class="task-item" data-task="caisson">
+          <div class="task-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/><rect x="10" y="10" width="4" height="4"/>
+            </svg>
+          </div>
+          <div class="task-info">
+            <span class="task-name">藻井</span>
+            <span class="task-desc">天宫楼阁 · 精妙斗拱</span>
+          </div>
+          <div class="task-check">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+          </div>
+        </li>
+        <li class="task-item" data-task="mural">
+          <div class="task-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 15l5-5 4 4 4-6 7 8"/><circle cx="8" cy="9" r="2"/>
+            </svg>
+          </div>
+          <div class="task-info">
+            <span class="task-name">壁画</span>
+            <span class="task-desc">清代重绘 · 佛教故事</span>
+          </div>
+          <div class="task-check">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+          </div>
+        </li>
+        <li class="task-item" data-task="dougong">
+          <div class="task-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 20h16M6 16h12M8 12h8M10 8h4M12 4v4"/>
+            </svg>
+          </div>
+          <div class="task-info">
+            <span class="task-name">斗拱</span>
+            <span class="task-desc">辽代原构 · 建筑瑰宝</span>
+          </div>
+          <div class="task-check">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+          </div>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- ---- RIGHT PANEL: AI Guide ---- -->
+    <aside class="panel-right collapsed" id="panel-right">
+      <button class="panel-close" id="btn-close-right">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      <div class="guide-header">
+        <div class="guide-avatar">
+          <div class="avatar-ring"></div>
+          <div class="avatar-dot"></div>
+        </div>
+        <div class="guide-info">
+          <h3>AI 导览</h3>
+          <span class="guide-status">在线</span>
+        </div>
+      </div>
+      <div class="guide-messages" id="guide-messages">
+        <div class="message guide-msg">
+          <p>欢迎来到善化寺数字博物馆。</p>
+          <p>我是您的 AI 导览员。这座始建于唐代的古刹，已走过千年风雨。</p>
+          <p>请跟随我的指引，探索辽金建筑的巅峰之作。您可以环顾四周，点击金色光点开始探索之旅。</p>
+        </div>
+      </div>
+      <div class="guide-input-area">
+        <input type="text" class="guide-input" id="guide-input" placeholder="问我关于善化寺的任何问题...">
+        <button class="btn-send" id="btn-send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+          </svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ---- Artifact Card ---- -->
+    <div id="artifact-card" class="artifact-card hidden">
+      <button class="artifact-close" id="artifact-close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      <div class="artifact-image" id="artifact-image"></div>
+      <div class="artifact-body">
+        <span class="artifact-era" id="artifact-era"></span>
+        <h2 class="artifact-title" id="artifact-title"></h2>
+        <p class="artifact-desc" id="artifact-desc"></p>
+        <button class="btn-story" id="btn-story">
+          <span>展开故事</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="artifact-story hidden" id="artifact-story"></div>
+      </div>
+    </div>
+
+    <!-- ---- FLOATING TIMELINE (glassmorphism pill) ---- -->
+    <div class="glass-timeline" id="timeline-bar">
+      <div class="timeline-track">
+        <div class="timeline-line"></div>
+        <div class="timeline-node" data-era="tang">
+          <div class="node-dot"></div>
+          <span class="node-label">唐</span>
+          <span class="node-year">713年</span>
+        </div>
+        <div class="timeline-node active" data-era="liao">
+          <div class="node-dot"></div>
+          <span class="node-label">辽</span>
+          <span class="node-year">1060年</span>
+        </div>
+        <div class="timeline-node" data-era="jin">
+          <div class="node-dot"></div>
+          <span class="node-label">金</span>
+          <span class="node-year">1128年</span>
+        </div>
+        <div class="timeline-node" data-era="ming">
+          <div class="node-dot"></div>
+          <span class="node-label">明</span>
+          <span class="node-year">1445年</span>
+        </div>
+        <div class="timeline-node" data-era="qing">
+          <div class="node-dot"></div>
+          <span class="node-label">清</span>
+          <span class="node-year">1708年</span>
+        </div>
+        <div class="timeline-node" data-era="today">
+          <div class="node-dot"></div>
+          <span class="node-label">今天</span>
+          <span class="node-year">2026年</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======================== SCRIPTS ======================== -->
+  <script src="js/app.js"></script>
+</body>
+</html>
