@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shanhua 数位博物馆 — AR Demo (model-viewer)</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 0; background: #f7f7f8; color: #111 }
+      header { padding: 1rem; background: #0b5cff; color: white }
+      .container { max-width: 980px; margin: 1.2rem auto; padding: 1rem }
+      h1 { margin: 0 0 0.4rem 0; font-size: 1.4rem }
+      p.lead { margin: 0 0 1rem 0; color: #333 }
+      .card { background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 8px rgba(12,20,30,0.06) }
+      model-viewer { width: 100%; height: 70vh; background: #eaeef8; border-radius: 6px }
+      .hint { font-size: 0.95rem; color: #444; margin-top: 0.8rem }
+      footer { text-align:center; color:#666; font-size:0.9rem; margin: 1.2rem 0 }
+      .actions { margin-top: 0.8rem }
+      .btn { display:inline-block; padding: 0.45rem 0.8rem; border-radius:6px; background:#0b5cff; color:white; text-decoration:none }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <strong>Shanhua 数位博物馆</strong>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="card">
+        <h1>AR Demo — model-viewer（快速、兼容面最好）</h1>
+        <p class="lead">把手机对准屏幕并点击页面中的 AR 按钮即可在支持的设备上以增强现实查看 3D 展品。</p>
+
+        <!-- model-viewer 示例：使用官方 shared-assets 的 Astronaut 模型作为演示 -->
+        <model-viewer id="mv" src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+          ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
+          alt="Astronaut"
+          ar ar-modes="webxr scene-viewer quick-look"
+          camera-controls
+          auto-rotate
+          exposure="1"
+          shadow-intensity="1"
+          style="display:block">
+        </model-viewer>
+
+        <div class="hint">
+          <strong>说明：</strong>
+          <ul>
+            <li>支持：Android（Chrome 支持 Scene Viewer / WebXR），iOS（Safari 支持 Quick Look）。</li>
+            <li>页面需要通过 HTTPS 访问才能打开摄像头并进入 AR。</li>
+            <li>要替换为你自己的模型，请把 glb 上传到仓库（例如 /assets/models/exhibit.glb），并把上面 src 改为对应路径；若要在 iOS 使用 Quick Look，准备对应的 .usdz 并放到 ios-src。</li>
+          </ul>
+        </div>
+
+        <div class="actions">
+          <a class="btn" href="#mv" onclick="document.getElementById('mv').scrollIntoView({behavior:'smooth'}); return false">滚动到模型</a>
+        </div>
+
+        <div class="hint">如果你的手机没有出现 AR 按钮：
+          <ol>
+            <li>确认通过 HTTPS 访问（GitHub Pages / Vercel / Netlify 等）。</li>
+            <li>在 Android 上使用 Chrome；在 iOS 上使用 Safari（且 iOS 版本需支持 Quick Look）。</li>
+            <li>在部分 Android 机型上，首次点击 AR 会弹出要打开 Scene Viewer 的确认。</li>
+          </ol>
+        </div>
+
+        <hr />
+
+        <h2>开发者提示</h2>
+        <ul>
+          <li>推荐模型格式：glTF / .glb（网页加载快），iOS Quick Look 用 .usdz。</li>
+          <li>模型优化：使用 gltf-pipeline、Draco、合并材质、压缩贴图等方式减少体积。</li>
+          <li>示例中使用的模型来自 modelviewer.dev 的共享示例，可直接在线测试，不需要上传模型文件。</li>
+        </ul>
+
+      </div>
+
+      <footer>
+        Demo 已添加到仓库：ar-demo/model-viewer-demo.html
+      </footer>
+    </main>
+  </body>
+</html>
