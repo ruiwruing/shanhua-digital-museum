@@ -31,10 +31,11 @@
         <h1>AR Demo — model-viewer（快速、兼容面最好）</h1>
         <p class="lead">把手机对准屏幕并点击页面中的 AR 按钮即可在支持的设备上以增强现实查看 3D 展品。</p>
 
-        <!-- model-viewer 示例：使用官方 shared-assets 的 Astronaut 模型作为演示 -->
-        <model-viewer id="mv" src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
-          ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
-          alt="Astronaut"
+        <!-- model-viewer 示例：指向你上传到 ar-demo 分支的 exhibit.glb -->
+        <model-viewer id="mv"
+          src="https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/ar-demo/ar-demo/models/exhibit.glb"
+          ios-src="https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/ar-demo/ar-demo/models/exhibit.usdz"
+          alt="展品 — 佛像"
           ar ar-modes="webxr scene-viewer quick-look"
           camera-controls
           auto-rotate
@@ -48,7 +49,7 @@
           <ul>
             <li>支持：Android（Chrome 支持 Scene Viewer / WebXR），iOS（Safari 支持 Quick Look）。</li>
             <li>页面需要通过 HTTPS 访问才能打开摄像头并进入 AR。</li>
-            <li>要替换为你自己的模型，请把 glb 上传到仓库（例如 /assets/models/exhibit.glb），并把上面 src 改为对应路径；若要在 iOS 使用 Quick Look，准备对应的 .usdz 并放到 ios-src。</li>
+            <li>若你还没有 .usdz 文件，iOS 上会降级为页面内 3D 视图；要在 iOS 上进入 Quick Look，请把 exhibit.usdz 放在同一路径（或我可以帮你生成）。</li>
           </ul>
         </div>
 
@@ -70,13 +71,13 @@
         <ul>
           <li>推荐模型格式：glTF / .glb（网页加载快），iOS Quick Look 用 .usdz。</li>
           <li>模型优化：使用 gltf-pipeline、Draco、合并材质、压缩贴图等方式减少体积。</li>
-          <li>示例中使用的模型来自 modelviewer.dev 的共享示例，可直接在线测试，不需要上传模型文件。</li>
+          <li>示例现在已经指向你上传的 exhibit.glb（ar-demo 分支），如果你后续移动文件或改名，需要同步更新这里的 URL。</li>
         </ul>
 
       </div>
 
       <footer>
-        Demo 已添加到仓库：ar-demo/model-viewer-demo.html
+        Demo 已更新以加载 ar-demo 分支的 exhibit.glb
       </footer>
     </main>
   </body>
