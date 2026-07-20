@@ -1,1 +1,154 @@
-<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>善化寺 · 数字博物馆</title>\n  <style>\n    * {\n      margin: 0;\n      padding: 0;\n      box-sizing: border-box;\n    }\n\n    body {\n      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;\n      background: linear-gradient(135deg, #0a0e1a 0%, #1a2035 100%);\n      color: #fff;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 20px;\n    }\n\n    .container {\n      max-width: 600px;\n      text-align: center;\n    }\n\n    h1 {\n      font-size: 3rem;\n      margin-bottom: 20px;\n      background: linear-gradient(135deg, #e8c878, #d4a853);\n      -webkit-background-clip: text;\n      -webkit-text-fill-color: transparent;\n      background-clip: text;\n    }\n\n    .subtitle {\n      font-size: 1.2rem;\n      color: rgba(255, 255, 255, 0.7);\n      margin-bottom: 40px;\n      letter-spacing: 0.15em;\n    }\n\n    .nav-grid {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 20px;\n      margin-bottom: 40px;\n    }\n\n    .nav-card {\n      background: rgba(255, 255, 255, 0.05);\n      backdrop-filter: blur(20px);\n      border: 1px solid rgba(255, 255, 255, 0.1);\n      border-radius: 16px;\n      padding: 30px 20px;\n      text-decoration: none;\n      color: inherit;\n      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);\n      cursor: pointer;\n    }\n\n    .nav-card:hover {\n      background: rgba(255, 255, 255, 0.08);\n      border-color: rgba(212, 168, 83, 0.3);\n      transform: translateY(-4px);\n      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);\n    }\n\n    .nav-icon {\n      font-size: 2.5rem;\n      margin-bottom: 12px;\n    }\n\n    .nav-title {\n      font-size: 1.1rem;\n      font-weight: 600;\n      margin-bottom: 8px;\n    }\n\n    .nav-desc {\n      font-size: 0.9rem;\n      color: rgba(255, 255, 255, 0.6);\n      line-height: 1.4;\n    }\n\n    .footer {\n      color: rgba(255, 255, 255, 0.5);\n      font-size: 0.9rem;\n    }\n\n    .footer a {\n      color: #e8c878;\n      text-decoration: none;\n      transition: color 0.2s;\n    }\n\n    .footer a:hover {\n      color: #fff;\n    }\n\n    @media (max-width: 480px) {\n      h1 {\n        font-size: 2rem;\n      }\n\n      .nav-grid {\n        grid-template-columns: 1fr;\n      }\n\n      .nav-card {\n        padding: 20px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>善化寺</h1>\n    <p class=\"subtitle\">数字博物馆</p>\n\n    <div class=\"nav-grid\">\n      <a href=\"../index.html\" class=\"nav-card\">\n        <div class=\"nav-icon\">🏛️</div>\n        <div class=\"nav-title\">虚拟博物馆</div>\n        <div class=\"nav-desc\">全景漫游<br>AI 导览<br>探索任务</div>\n      </a>\n\n      <a href=\"../ar-demo/index.html\" class=\"nav-card\">\n        <div class=\"nav-icon\">📱</div>\n        <div class=\"nav-title\">AR 演示</div>\n        <div class=\"nav-desc\">3D 文物<br>增强现实<br>互动体验</div>\n      </a>\n    </div>\n\n    <div class=\"footer\">\n      <p>善化寺始建于唐开元年间（713年）<br>\n      <a href=\"https://github.com/ruiwruing/shanhua-digital-museum\" target=\"_blank\">GitHub 仓库</a> · 2026\n    </div>\n  </div>\n</body>\n</html>"
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>善化寺 · 数字博物馆</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+      background: linear-gradient(135deg, #0a0e1a 0%, #1a2035 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #e8c878, #d4a853);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.2em;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 50px;
+      letter-spacing: 0.15em;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 50px;
+    }
+
+    .nav-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 30px 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      display: block;
+    }
+
+    .nav-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(212, 168, 83, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .nav-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #e8c878;
+    }
+
+    .nav-desc {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+    }
+
+    .footer {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .footer a {
+      color: #e8c878;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer a:hover {
+      color: #fff;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .nav-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>善化寺</h1>
+    <p class="subtitle">数字博物馆</p>
+
+    <div class="nav-grid">
+      <a href="./index.html" class="nav-card">
+        <span class="nav-icon">🏛️</span>
+        <div class="nav-title">虚拟博物馆</div>
+        <div class="nav-desc">全景漫游<br>AI 导览<br>探索任务</div>
+      </a>
+
+      <a href="./ar-demo/index.html" class="nav-card">
+        <span class="nav-icon">📱</span>
+        <div class="nav-title">AR 演示</div>
+        <div class="nav-desc">3D 文物<br>增强现实<br>互动体验</div>
+      </a>
+    </div>
+
+    <div class="footer">
+      <p>善化寺始建于唐开元年间（713年）</p>
+      <p><a href="https://github.com/ruiwruing/shanhua-digital-museum" target="_blank">GitHub 仓库</a> · 2026</p>
+    </div>
+  </div>
+</body>
+</html>
