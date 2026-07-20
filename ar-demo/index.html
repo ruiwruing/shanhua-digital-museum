@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>善化寺 · AR 演示</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/animation.css">
+  <style>
+    /* ================================================================
+       善化寺 AR Demo — 样式系统
+       ================================================================ */
+
+    :root {
+      /* 深蓝夜色体系 */
+      --bg-primary: #0a0e1a;
+      --bg-secondary: #111827;
+      --bg-tertiary: #1a2035;
+      --bg-card: rgba(17, 24, 39, 0.72);
+
+      /* Glassmorphism */
+      --glass-bg: rgba(255, 255, 255, 0.06);
+      --glass-bg-hover: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-blur: 20px;
+
+      /* 鎏金色系 */
+      --gold: #d4a853;
+      --gold-light: #e8c878;
+      --gold-dark: #b8912e;
+      --gold-glow: rgba(212, 168, 83, 0.3);
+
+      /* 文字 */
+      --text-primary: rgba(255, 255, 255, 0.95);
+      --text-secondary: rgba(255, 255, 255, 0.65);
+      --text-tertiary: rgba(255, 255, 255, 0.4);
+
+      /* 圆角 */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --radius-full: 9999px;
+
+      /* 字体 */
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Inter', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ---- Header ---- */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 24px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(30px) saturate(1.5);
+      -webkit-backdrop-filter: blur(30px) saturate(1.5);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      margin: 0;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .nav-link {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--gold-light);
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+      background: var(--glass-bg-hover);
+      color: var(--text-primary);
+    }
+
+    /* ---- Main Content ---- */
+    main {
+      margin-top: 64px;
+      min-height: 100vh;
+      padding: 32px 24px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .hero h2 {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ---- AR Models Grid ---- */
+    .ar-models {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .ar-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(32px) saturate(1.4);
+      -webkit-backdrop-filter: blur(32px) saturate(1.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .ar-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(212, 168, 83, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .ar-card-preview {
+      width: 100%;
+      height: 240px;
+      background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--text-tertiary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ar-card-preview::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(212, 168, 83, 0.1), transparent);
+      pointer-events: none;
+    }
+
+    .ar-card-content {
+      padding: 20px;
+    }
+
+    .ar-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .ar-card-era {
+      display: inline-block;
+      font-size: 0.7rem;
+      color: var(--gold);
+      background: rgba(212, 168, 83, 0.1);
+      border: 1px solid rgba(212, 168, 83, 0.2);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      margin-bottom: 12px;
+    }
+
+    .ar-card-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .ar-card-footer {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+    }
+
+    .btn-view-ar {
+      flex: 1;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      border: none;
+      border-radius: var(--radius-md);
+      color: var(--bg-primary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .btn-view-ar:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 16px var(--gold-glow);
+    }
+
+    .btn-info {
+      padding: 10px 12px;
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-info:hover {
+      background: var(--glass-bg-hover);
+      color: var(--text-primary);
+    }
+
+    /* ---- Modal ---- */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 32px;
+      position: relative;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(40px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+      color: var(--text-primary);
+    }
+
+    .modal-title {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .modal-meta {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .modal-meta span {
+      display: inline-block;
+      font-size: 0.85rem;
+      color: var(--gold);
+      background: rgba(212, 168, 83, 0.1);
+      border: 1px solid rgba(212, 168, 83, 0.2);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+    }
+
+    .modal-body {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 600px;
+      margin: 20px 0;
+      border-radius: var(--radius-lg);
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+
+      .hero h2 {
+        font-size: 1.8rem;
+      }
+
+      .ar-models {
+        grid-template-columns: 1fr;
+      }
+
+      main {
+        padding: 16px 12px;
+        margin-top: 120px;
+      }
+
+      .modal-content {
+        padding: 20px;
+      }
+
+      model-viewer {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================== HEADER ======================== -->
+  <header>
+    <h1>🏯 善化寺 AR 演示</h1>
+    <div class="header-nav">
+      <a href="../index.html" class="btn-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回博物馆
+      </a>
+    </div>
+  </header>
+
+  <!-- ======================== MAIN ======================== -->
+  <main>
+    <div class="container">
+      <!-- Hero Section -->
+      <section class="hero">
+        <h2>用 AR 探索文物</h2>
+        <p>将善化寺的文物艺术品通过增强现实技术展现在你的眼前。点击下方卡片选择文物，然后进入 AR 模式，在真实环境中观看 3D 模型。</p>
+      </section>
+
+      <!-- AR Models Grid -->
+      <section class="ar-models" id="ar-models-grid">
+        <!-- 动态插入 -->
+      </section>
+    </div>
+  </main>
+
+  <!-- ======================== MODAL ======================== -->
+  <div class="modal" id="ar-modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeARModal()">&times;</button>
+      <h2 class="modal-title" id="modal-title">文物名称</h2>
+      <div class="modal-meta">
+        <span id="modal-era">年代</span>
+        <span id="modal-location">位置</span>
+      </div>
+      <model-viewer id="ar-viewer"
+        alt="文物"
+        ar ar-modes="webxr scene-viewer quick-look"
+        camera-controls
+        auto-rotate
+        exposure="1"
+        shadow-intensity="1">
+      </model-viewer>
+      <div class="modal-body" id="modal-desc"></div>
+    </div>
+  </div>
+
+  <script>
+    // AR Models Database
+    const AR_MODELS = [
+      {
+        id: 'buddha',
+        title: '五方佛',
+        era: '辽代',
+        location: '大雄宝殿',
+        emoji: '🙏',
+        desc: '善化寺大雄宝殿内供奉的五尊彩塑佛像，为辽代原作，神态端庄，衣纹流畅，是中国现存最精美的辽代彩塑之一。五方佛分别代表五个方位的佛国世界，中央的毗卢遮那佛是法身佛，象征宇宙本体。',
+        modelUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb',
+        iOSUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb'
+      },
+      {
+        id: 'caisson',
+        title: '藻井',
+        era: '辽代',
+        location: '大雄宝殿穹顶',
+        emoji: '✨',
+        desc: '殿内穹顶藻井以层层斗拱叠涩而成，呈天宫楼阁之形，精妙绝伦，堪称建筑艺术的巅峰之作。不用一根铁钉，全靠榫卯咬合，历经千年依然稳固，这是辽代匠人智慧的结晶。',
+        modelUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb',
+        iOSUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb'
+      },
+      {
+        id: 'mural',
+        title: '壁画',
+        era: '清代',
+        location: '殿内两壁',
+        emoji: '🎨',
+        desc: '殿内两壁绘有佛教故事壁画，虽为清代重绘，但色彩鲜艳、构图宏大，展现了佛教艺术的深厚底蕴。画面描绘了佛陀说法的盛大场景，菩萨、罗汉、飞天环绕四周。',
+        modelUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb',
+        iOSUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb'
+      },
+      {
+        id: 'dougong',
+        title: '斗拱',
+        era: '辽代',
+        location: '大雄宝殿柱顶',
+        emoji: '🏗️',
+        desc: '善化寺大雄宝殿的斗拱为辽代原构，体量宏大、造型雄浑，是中国现存最大的辽金木构建筑遗存之一。它不仅是结构件，更是等级的象征——出跳越多，建筑等级越高。',
+        modelUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb',
+        iOSUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb'
+      }
+    ];
+
+    // Initialize AR Cards
+    function initARCards() {
+      const grid = document.getElementById('ar-models-grid');
+      grid.innerHTML = AR_MODELS.map(model => `
+        <div class="ar-card">
+          <div class="ar-card-preview">${model.emoji}</div>
+          <div class="ar-card-content">
+            <div class="ar-card-era">${model.era}</div>
+            <h3 class="ar-card-title">${model.title}</h3>
+            <p class="ar-card-desc">${model.location}</p>
+            <div class="ar-card-footer">
+              <button class="btn-view-ar" onclick="openARModal('${model.id}')">查看 AR</button>
+              <button class="btn-info" onclick="showDetails('${model.id}')">ℹ️</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Open AR Modal with Model Viewer
+    function openARModal(modelId) {
+      const model = AR_MODELS.find(m => m.id === modelId);
+      if (!model) return;
+
+      const modal = document.getElementById('ar-modal');
+      const viewer = document.getElementById('ar-viewer');
+      document.getElementById('modal-title').textContent = model.title;
+      document.getElementById('modal-era').textContent = model.era;
+      document.getElementById('modal-location').textContent = model.location;
+      document.getElementById('modal-desc').textContent = model.desc;
+
+      viewer.src = model.modelUrl;
+      if (model.iOSUrl) {
+        viewer.setAttribute('ios-src', model.iOSUrl);
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeARModal() {
+      document.getElementById('ar-modal').classList.remove('active');
+    }
+
+    function showDetails(modelId) {
+      const model = AR_MODELS.find(m => m.id === modelId);
+      if (model) {
+        alert(`${model.title}\n${model.era} | ${model.location}\n\n${model.desc}`);
+      }
+    }
+
+    // Close modal on background click
+    document.getElementById('ar-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'ar-modal') closeARModal();
+    });
+
+    // Initialize
+    initARCards();
+  </script>
+
+</body>
+</html>
