@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>善化寺 · AR 演示</title>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -102,17 +102,6 @@
       align-items: center;
     }
 
-    .nav-link {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .nav-link:hover {
-      color: var(--gold-light);
-    }
-
     .btn-back {
       display: inline-flex;
       align-items: center;
@@ -125,6 +114,7 @@
       cursor: pointer;
       font-size: 0.9rem;
       transition: all 0.2s;
+      text-decoration: none;
     }
 
     .btn-back:hover {
@@ -169,10 +159,25 @@
       line-height: 1.6;
     }
 
+    /* ---- AR Hint ---- */
+    .ar-hint {
+      background: rgba(212, 168, 83, 0.1);
+      border: 1px solid rgba(212, 168, 83, 0.2);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin: 20px 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .ar-hint strong {
+      color: var(--gold-light);
+    }
+
     /* ---- AR Models Grid ---- */
     .ar-models {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 24px;
       margin-bottom: 48px;
     }
@@ -357,6 +362,7 @@
       display: flex;
       gap: 12px;
       margin-bottom: 20px;
+      flex-wrap: wrap;
     }
 
     .modal-meta span {
@@ -375,11 +381,24 @@
       color: var(--text-secondary);
     }
 
+    /* ---- Model Viewer Styles ---- */
     model-viewer {
       width: 100%;
       height: 600px;
       margin: 20px 0;
       border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    }
+
+    /* Model Viewer AR 按钮样式 */
+    model-viewer::part(ar-button) {
+      background-color: var(--gold);
+      border-radius: var(--radius-md);
+      color: var(--bg-primary);
+    }
+
+    model-viewer::part(ar-button):hover {
+      background-color: var(--gold-light);
     }
 
     /* ---- Responsive ---- */
@@ -417,7 +436,7 @@
 
   <!-- ======================== HEADER ======================== -->
   <header>
-    <h1>🏯 善化寺 AR 演示</h1>
+    <h1>🏛️ 善化寺 AR 演示</h1>
     <div class="header-nav">
       <a href="../index.html" class="btn-back">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -434,8 +453,15 @@
       <!-- Hero Section -->
       <section class="hero">
         <h2>用 AR 探索文物</h2>
-        <p>将善化寺的文物艺术品通过增强现实技术展现在你的眼前。点击下方卡片选择文物，然后进入 AR 模式，在真实环境中观看 3D 模型。</p>
+        <p>将善化寺的文物艺术品通过增强现实技术展示在你的眼前。点击下方卡片选择文物，然后进入 AR 模式，在真实环境中观看 3D 模型。</p>
       </section>
+
+      <!-- AR 提示 -->
+      <div class="ar-hint">
+        <strong>📱 AR 支持说明：</strong><br>
+        Android: 使用 Chrome 浏览器，点击模型上的 <strong>VIEW IN YOUR SPACE</strong> 按钮<br>
+        iOS: 使用 Safari 浏览器，系统会自动显示 AR 选项
+      </div>
 
       <!-- AR Models Grid -->
       <section class="ar-models" id="ar-models-grid">
@@ -453,14 +479,28 @@
         <span id="modal-era">年代</span>
         <span id="modal-location">位置</span>
       </div>
-      <model-viewer id="ar-viewer"
-        alt="文物"
-        ar ar-modes="webxr scene-viewer quick-look"
+      
+      <!-- Model Viewer with AR enabled -->
+      <model-viewer
+        id="ar-viewer"
+        alt="展品"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
         camera-controls
         auto-rotate
+        auto-rotate-delay="3000"
         exposure="1"
         shadow-intensity="1">
       </model-viewer>
+
+      <div class="ar-hint">
+        <strong>✨ AR 使用提示：</strong><br>
+        • 确保充足的光线环境<br>
+        • 给模型留出足够的空间<br>
+        • 缓慢移动设备以获得最佳效果<br>
+        • 点击屏幕上的 AR 按钮开始增强现实体验
+      </div>
+
       <div class="modal-body" id="modal-desc"></div>
     </div>
   </div>
@@ -474,7 +514,7 @@
         era: '辽代',
         location: '大雄宝殿',
         emoji: '🙏',
-        desc: '善化寺大雄宝殿内供奉的五尊彩塑佛像，为辽代原作，神态端庄，衣纹流畅，是中国现存最精美的辽代彩塑之一。五方佛分别代表五个方位的佛国世界，中央的毗卢遮那佛是法身佛，象征宇宙本体。',
+        desc: '善化寺大雄宝殿内供奉的五尊彩塑佛像，为辽代原作，神态端庄，衣纹流畅，是中国现存最精美的辽代彩塑之一。五方佛分别代表五个方位的佛国世界，中央的毗卢遮那佛是法身佛，象征宇宙本体。注意观察佛像的面部——辽代工匠塑造的面容丰满圆润，带有明显的契丹民族特征。',
         modelUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb',
         iOSUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb'
       },
@@ -484,7 +524,7 @@
         era: '辽代',
         location: '大雄宝殿穹顶',
         emoji: '✨',
-        desc: '殿内穹顶藻井以层层斗拱叠涩而成，呈天宫楼阁之形，精妙绝伦，堪称建筑艺术的巅峰之作。不用一根铁钉，全靠榫卯咬合，历经千年依然稳固，这是辽代匠人智慧的结晶。',
+        desc: '殿内穹顶藻井以层层斗拱叠涩而成，呈天宫楼阁之形，精妙绝伦，堪称建筑艺术的巅峰之作。藻井是古建筑的精华所在——层层斗拱如同花瓣般绽放，这种结构被称为"天宫楼阁"。不用一根铁钉，全靠榫卯咬合，历经千年依然稳固。这是辽代匠人智慧的结晶。',
         modelUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb',
         iOSUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb'
       },
@@ -494,7 +534,7 @@
         era: '清代',
         location: '殿内两壁',
         emoji: '🎨',
-        desc: '殿内两壁绘有佛教故事壁画，虽为清代重绘，但色彩鲜艳、构图宏大，展现了佛教艺术的深厚底蕴。画面描绘了佛陀说法的盛大场景，菩萨、罗汉、飞天环绕四周。',
+        desc: '殿内两壁绘有佛教故事壁画，虽为清代重绘，但色彩鲜艳、构图宏大，展现了佛教艺术的深厚底蕴。这些壁画虽为清代重绘，但保留了辽金时期的构图风格。画面中描绘了佛陀说法的盛大场景——菩萨、罗汉、飞天环绕四周。仔细观察色彩的运用：石青与朱红的搭配，是中国传统壁画的经典配色。',
         modelUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb',
         iOSUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb'
       },
@@ -503,8 +543,8 @@
         title: '斗拱',
         era: '辽代',
         location: '大雄宝殿柱顶',
-        emoji: '🏗️',
-        desc: '善化寺大雄宝殿的斗拱为辽代原构，体量宏大、造型雄浑，是中国现存最大的辽金木构建筑遗存之一。它不仅是结构件，更是等级的象征——出跳越多，建筑等级越高。',
+        emoji: '🏯',
+        desc: '善化寺大雄宝殿的斗拱为辽代原构，体量宏大、造型雄浑，是中国现存最大的辽金木构建筑遗存之一。斗拱是中国古建筑最具标志性的构件。善化寺的斗拱体量之大，在现存辽金建筑中首屈一指。它不仅是结构件，更是等级的象征——出跳越多，建筑等级越高。大雄宝殿的斗拱出跳深远，彰显了这座皇家寺院的不凡地位。',
         modelUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb',
         iOSUrl: 'https://raw.githubusercontent.com/ruiwruing/shanhua-digital-museum/main/ar-demo/exhibit.glb'
       }
